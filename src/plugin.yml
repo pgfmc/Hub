@@ -1,0 +1,6 @@
+name: SaveTest
+version: 3.0.0
+api-version: 1.16
+author: bk
+main: tk.pgfriends.savetest.Main
+description: Tests YAML save file thing
