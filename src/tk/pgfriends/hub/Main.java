@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import tk.pgfriends.hub.commands.Hub;
 import tk.pgfriends.hub.events.PlayerEvents;
 
 public class Main extends JavaPlugin {
@@ -18,6 +19,14 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable()
 	{
+		//REGISTRATION for Events and Commands!
+		getServer().getPluginManager().registerEvents(new PlayerEvents(), this); // Registers PlayerEvents events class
+        this.getCommand("hub").setExecutor(new Hub()); // Registers Hub command class
+        
+        
+        
+        
+        // Save data
 		File file = new File(getDataFolder() + File.separator + "database.yml");
 		FileConfiguration database = YamlConfiguration.loadConfiguration(file);
 		
@@ -39,7 +48,7 @@ public class Main extends JavaPlugin {
 		
 		
 		
-		getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
+		
 	}
 	
 	@Override
