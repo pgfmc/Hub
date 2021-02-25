@@ -1,2 +1,2 @@
 # Hub
-/hub Spigot plugin
+/hub - Allows players to go to the Hub and other worlds Spigot plugin
