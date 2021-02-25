@@ -1,6 +1,6 @@
 module Hub {
-	exports tk.pgfriends.savetest.events;
-	exports tk.pgfriends.savetest;
+	exports tk.pgfriends.hub.events;
+	exports tk.pgfriends.hub;
 
 	requires java.logging;
 	requires spigot;
