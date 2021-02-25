@@ -1,0 +1,2 @@
+# Hub
+/hub Spigot plugin
