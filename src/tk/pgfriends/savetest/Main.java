@@ -1,4 +1,4 @@
-package tk.pgfriends.savetest;
+package tk.pgfriends.hub;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import tk.pgfriends.savetest.events.PlayerEvents;
+import tk.pgfriends.hub.events.PlayerEvents;
 
 public class Main extends JavaPlugin {
 	
