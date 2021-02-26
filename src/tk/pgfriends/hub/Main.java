@@ -15,7 +15,8 @@ import tk.pgfriends.hub.commands.Hub;
 
 public class Main extends JavaPlugin {
 	
-	private Main plugin;
+	@SuppressWarnings("unused")
+	private Main plugin; // Used for constructor
 	
 	File file = new File(getDataFolder() + File.separator + "database.yml"); // Creates a File object
 	FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data
@@ -84,7 +85,6 @@ public class Main extends JavaPlugin {
 	
 	
 	
-	@SuppressWarnings("exports")
 	public static void save(Player player, Location loc, Location dest, FileConfiguration db) // Saves the data to the file when called
 	{
 		db.set(loc.getWorld().toString() + ".uuid", loc.serialize());
@@ -95,7 +95,7 @@ public class Main extends JavaPlugin {
 	
 	
 	
-	@SuppressWarnings({ "exports", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	public static Location load(String uuid, World world, FileConfiguration db) // Loads the data to the plugin when called
 	{
 		

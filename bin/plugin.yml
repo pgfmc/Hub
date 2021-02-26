@@ -4,3 +4,8 @@ api-version: 1.16
 author: bk
 main: tk.pgfriends.hub.Main
 description: Allows players to go to the Hub and other minigames
+commands:
+  hub:
+    description: Teleport to the Hub
+    usage: /<command> [player]
+    aliases: [spawn]
