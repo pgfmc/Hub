@@ -14,15 +14,11 @@ import org.bukkit.entity.Player;
 import tk.pgfriends.hub.Main;
 
 public class Hub implements CommandExecutor { // /hub
+	private Main plugin; // Creates new plugin variable to avoid using static (because File dumb)
+	Main main = new Main(plugin); // Sets the Hub class' private Main plugin to the Main's private Main plugin (getter/setter constructor)
 	
-	private Main plugin;
-
-	public Hub(Main plugin) // Helps me from having to use static because File is weird
-	{
-	   this.plugin = plugin;
-	}
-	
-	File file = new File(plugin.getDataFolder() + File.separator + "database.yml"); // Creates a File object
+	// We need to do this again to avoid using static
+	File file = new File(plugin.getDataFolder() + File.separator + "database.yml"); // Creates a File object (plugin.getDataFolder() here now because this class doesn't extend JavaPlugin (not the Main class))
 	FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data
 
 	@Override

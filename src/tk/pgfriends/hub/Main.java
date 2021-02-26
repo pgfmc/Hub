@@ -2,6 +2,7 @@ package tk.pgfriends.hub;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,8 +15,17 @@ import tk.pgfriends.hub.commands.Hub;
 
 public class Main extends JavaPlugin {
 	
+	private Main plugin;
+	
 	File file = new File(getDataFolder() + File.separator + "database.yml"); // Creates a File object
 	FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data
+	
+	public Main(Main plugin) // Constructor that lets me create an instance of Main class so I can get plugin without having to use static modifier
+	{
+	   this.plugin = plugin;
+	}
+	
+	
 	
 	@Override
 	public void onEnable() // When the plugin is enabled
@@ -74,6 +84,7 @@ public class Main extends JavaPlugin {
 	
 	
 	
+	@SuppressWarnings("exports")
 	public static void save(Player player, Location loc, Location dest, FileConfiguration db) // Saves the data to the file when called
 	{
 		db.set(loc.getWorld().toString() + ".uuid", loc.serialize());
@@ -84,8 +95,10 @@ public class Main extends JavaPlugin {
 	
 	
 	
+	@SuppressWarnings({ "exports", "unchecked" })
 	public static Location load(String uuid, World world, FileConfiguration db) // Loads the data to the plugin when called
 	{
-		return new Location(Location.deserialize(db.get(world.toString() + "." + uuid));
+		
+		return (Location.deserialize((Map<String, Object>) (db.get(world.toString() + "." + uuid))));
 	}
 }
