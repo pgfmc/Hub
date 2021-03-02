@@ -132,11 +132,7 @@ public class Main extends JavaPlugin {
 	{
 		if (dest.getName().equals("hub"))
 		{
-			Location loc = Location.deserialize((Map<String, Object>) (db.get(dest.getName() + ".uuid." + uuid)));
-			loc.setX(0.5);
-			loc.setZ(193.0);
-			loc.setY(0.5);
-			
+			Location loc = new Location(dest, 0.5, 193.0, 0.5);
 			return loc;
 		}
 		
