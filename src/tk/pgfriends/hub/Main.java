@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tk.pgfriends.hub.commands.Hub;
+import tk.pgfriends.hub.commands.Survival;
 
 public class Main extends JavaPlugin {
 	
@@ -30,7 +31,7 @@ public class Main extends JavaPlugin {
 		//REGISTRATION for Events and Commands!
 		// (We don't need this right now) -- getServer().getPluginManager().registerEvents(new PlayerEvents(), this); // Registers PlayerEvents events class
         this.getCommand("hub").setExecutor(new Hub()); // Registers Hub command class
-        
+        this.getCommand("survival").setExecutor(new Survival()); // Registers Survival command class
         
 		
 		if (!file.exists()) // If the file doesn't exist, create one
@@ -83,6 +84,14 @@ public class Main extends JavaPlugin {
 	
 	public static void save(Player player, Player sender, Location loc, Location dest, FileConfiguration db, File file) // Saves the data to the file when called
 	{
+		/*
+		if (loc.getWorld().getName().equals("hub")) // Need to make sure they spawn at 0, 0
+		{
+			loc.setX(0.5);
+			loc.setZ(193.0);
+			loc.setY(0.5);
+		}
+		*/
 		
 		// We want the "path" to have the root world name as the MAIN world name (no _nether/_the_end). This information is still saved in <world>.uuid.<uuid>.world
 		// The reason for this is because we want to overwrite the saved world with the new world which might be a different dimension WITHOUT creating a new directory for dimensions of a world
@@ -97,16 +106,18 @@ public class Main extends JavaPlugin {
 			db.save(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.print("Something bad when saving");
 			e.printStackTrace();
 		}
 		
 		player.teleport(dest); // Teleports sender to the hub if no errors while saving
 
-		if (player.equals(sender))
+		if (player.getUniqueId().equals(sender.getUniqueId())) // If the sender and the person teleporting is the same
 		{
 			sender.sendMessage("§aSuccssfully teleported!");
 		}
 		
+		// If a staff ran /<command> [player]
 		sender.sendMessage("§a" + player.getName() + "was successfully sent to " + dest.getWorld().getName() + "!");
 		player.sendMessage("§aYou've been sent to " + dest.getWorld().getName() + " by a staff member!");
 		
@@ -119,6 +130,16 @@ public class Main extends JavaPlugin {
 	@SuppressWarnings({ "unchecked" })
 	public static Location load(String uuid, World dest, FileConfiguration db) // Loads the data to the plugin when called
 	{
-		return (Location.deserialize((Map<String, Object>) (db.get(dest.getName()+ ".uuid." + uuid))));
+		if (dest.getName().equals("hub"))
+		{
+			Location loc = Location.deserialize((Map<String, Object>) (db.get(dest.getName() + ".uuid." + uuid)));
+			loc.setX(0.5);
+			loc.setZ(193.0);
+			loc.setY(0.5);
+			
+			return loc;
+		}
+		
+		return (Location.deserialize((Map<String, Object>) (db.get(dest.getName() + ".uuid." + uuid))));
 	}
 }

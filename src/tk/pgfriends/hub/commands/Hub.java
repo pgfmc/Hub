@@ -26,14 +26,14 @@ public class Hub implements CommandExecutor { // /hub
 		if (((Player) sender).getLocation().getWorld().getName().equals("hub"))
 		{ 
 			((Player) sender).sendMessage("§cYou cannot use this command in the Hub.");
-			return false; 
+			return true; // Not false because false returns the correct usage, I don't want that lol
 		}
 		
 			Player player = (Player) sender; // new Player object from CommandSender
 			
 			Location dest = new Location(Bukkit.getWorld("hub"), 0.5, 193, 0.5);
 			
-			if (args.length == 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
+			if (args.length == 2) { return false; } // Returns false usage of /hub if more than 1 arguments (/hub bkYT str)
 			
 			if (args.length == 1) // If the command looks like: /hub <player>
 			{

@@ -9,3 +9,7 @@ commands:
     description: Teleport to the Hub
     usage: /<command> [player]
     aliases: [spawn]
+  survival:
+    description: Teleport to Survival
+    usage: /<command> [player]
+    aliases: [surv]

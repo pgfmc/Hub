@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,12 +27,13 @@ public class Survival implements CommandExecutor { // /survival
 		if (((Player) sender).getLocation().getWorld().getName().equals("survival") || ((Player) sender).getLocation().getWorld().getName().equals("survival_nether") || ((Player) sender).getLocation().getWorld().getName().equals("survival_the_end"))
 		{ 
 			((Player) sender).sendMessage("§cYou cannot use this command in Survival.");
-			return false; 
+			return true; // Silent
 		}
 		
 			Player player = (Player) sender; // new Player object from CommandSender
 			
-			Location dest = 
+			World world = Bukkit.getWorld("survival"); // Gets World survival
+			Location dest = Main.load(player.getUniqueId().toString(), world, database);
 			
 			if (args.length == 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
 			
@@ -41,9 +43,10 @@ public class Survival implements CommandExecutor { // /survival
 				{ 
 					player.sendMessage("§cThis player is not online.");
 					return false;
-				} 
+				}
 				
 				player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
+				dest = Main.load(player.getUniqueId().toString(), world, database);
 				
 				Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
 				
