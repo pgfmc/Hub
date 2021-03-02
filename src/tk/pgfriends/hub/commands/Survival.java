@@ -31,7 +31,7 @@ public class Survival implements CommandExecutor { // /survival
 		
 			Player player = (Player) sender; // new Player object from CommandSender
 			
-			Location dest = 
+			//Location dest = 
 			
 			if (args.length == 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
 			
