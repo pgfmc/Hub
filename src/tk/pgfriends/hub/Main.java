@@ -81,9 +81,17 @@ public class Main extends JavaPlugin {
 	
 	
 	
-	public static void save(Player player, Location loc, Location dest, FileConfiguration db, File file) // Saves the data to the file when called
+	public static void save(Player player, Player sender, Location loc, Location dest, FileConfiguration db, File file) // Saves the data to the file when called
 	{
-		db.set(loc.getWorld().getName() + ".uuid." + player.getUniqueId().toString() + "." + , loc.serialize());
+		
+		// We want the "path" to have the root world name as the MAIN world name (no _nether/_the_end). This information is still saved in <world>.uuid.<uuid>.world
+		// The reason for this is because we want to overwrite the saved world with the new world which might be a different dimension WITHOUT creating a new directory for dimensions of a world
+		if (loc.getWorld().getName().contains("nether")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 7) + ".uuid." + player.getUniqueId().toString(), loc.serialize()); } // If teleporting from Nether
+		
+		if (loc.getWorld().getName().contains("the_end")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 8) + ".uuid." + player.getUniqueId().toString(), loc.serialize()); } // If teleporting from The End
+		
+		if (!(loc.getWorld().getName().contains("the_end")) && !(loc.getWorld().getName().contains("nether"))) { db.set(loc.getWorld().getName() + ".uuid." + player.getUniqueId().toString(), loc.serialize()); } // If teleporting from Overworld
+		
 		
 		try {
 			db.save(file);
@@ -93,6 +101,15 @@ public class Main extends JavaPlugin {
 		}
 		
 		player.teleport(dest); // Teleports sender to the hub if no errors while saving
+
+		if (player.equals(sender))
+		{
+			sender.sendMessage("§aSuccssfully teleported!");
+		}
+		
+		sender.sendMessage("§a" + player.getName() + "was successfully sent to " + dest.getWorld().getName() + "!");
+		player.sendMessage("§aYou've been sent to " + dest.getWorld().getName() + " by a staff member!");
+		
 	}
 	
 	
@@ -100,9 +117,8 @@ public class Main extends JavaPlugin {
 	
 	
 	@SuppressWarnings({ "unchecked" })
-	public static Location load(String uuid, World world, FileConfiguration db) // Loads the data to the plugin when called
+	public static Location load(String uuid, World dest, FileConfiguration db) // Loads the data to the plugin when called
 	{
-		
-		return (Location.deserialize((Map<String, Object>) (db.get(world.getName() + "." + uuid))));
+		return (Location.deserialize((Map<String, Object>) (db.get(dest.getName()+ ".uuid." + uuid))));
 	}
 }
