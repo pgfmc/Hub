@@ -1,15 +1,19 @@
 package tk.pgfriends.hub;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandException;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tk.pgfriends.hub.commands.Hub;
@@ -93,18 +97,17 @@ public class Main extends JavaPlugin {
 		
 		// We want the "path" to have the root world name as the MAIN world name (no _nether/_the_end). This information is still saved in <world>.uuid.<uuid>.world
 		// The reason for this is because we want to overwrite the saved world with the new world which might be a different dimension WITHOUT creating a new directory for dimensions of a world
-		if (loc.getWorld().getName().contains("nether")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 7) + ".uuid." + player.getUniqueId().toString(), loc.serialize()); } // If teleporting from Nether
+		if (loc.getWorld().getName().contains("nether")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 7) + ".uuid." + player.getUniqueId().toString(), loc); } // If teleporting from Nether
 		
-		if (loc.getWorld().getName().contains("the_end")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 8) + ".uuid." + player.getUniqueId().toString(), loc.serialize()); } // If teleporting from The End
+		if (loc.getWorld().getName().contains("the_end")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 8) + ".uuid." + player.getUniqueId().toString(), loc); } // If teleporting from The End
 		
-		if (!(loc.getWorld().getName().contains("the_end")) && !(loc.getWorld().getName().contains("nether"))) { db.set(loc.getWorld().getName() + ".uuid." + player.getUniqueId().toString(), loc.serialize()); } // If teleporting from Overworld
+		if (!(loc.getWorld().getName().contains("the_end")) && !(loc.getWorld().getName().contains("nether"))) { db.set(loc.getWorld().getName() + ".uuid." + player.getUniqueId().toString(), loc); } // If teleporting from Overworld
 		
 		
 		try {
 			db.save(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.print("Something bad happened when saving");
 			e.printStackTrace();
 		}
 		
@@ -123,10 +126,8 @@ public class Main extends JavaPlugin {
 	
 	
 	
-	
-	
-	@SuppressWarnings({ "unchecked" })
-	public static Location load(String uuid, World dest, FileConfiguration db) // Loads the data to the plugin when called
+
+	public static Location load(String uuid, World dest, FileConfiguration db, File file) // Loads the data to the plugin when called
 	{
 		/*
 		if (dest.getName().equals("hub")) // This isn't actually being used yet
@@ -136,14 +137,27 @@ public class Main extends JavaPlugin {
 		}
 		*/
 		
-		try {
-			Location loc = (Location.deserialize((Map<String, Object>) (db.get(dest.getName() + ".uuid." + uuid))));
-			return loc;
-		} catch (CommandException e) {
-			System.out.print("Something bad happened when loading");
-			e.printStackTrace();
+		if (file.exists()) {
+			try {
+				db.load(file); // loads file (duh)
+				
+				return (Location) db.get(dest.getName() + ".uuid." + uuid);
+				
+				
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		return new Location(dest, 0.5, 193.0, 0.5);
+		
+		return new Location(dest, 0.5, 300.0, 0.5);
 		
 	}
 }

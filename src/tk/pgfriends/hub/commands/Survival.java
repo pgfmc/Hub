@@ -46,7 +46,7 @@ public class Survival implements CommandExecutor { // /survival
 				}
 				
 				player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
-				dest = Main.load(player.getUniqueId().toString(), world, database);
+				dest = Main.load(player.getUniqueId().toString(), world, database, file);
 				
 				Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
 				
@@ -54,7 +54,7 @@ public class Survival implements CommandExecutor { // /survival
 				
 			}
 			
-			dest = Main.load(player.getUniqueId().toString(), world, database);
+			dest = Main.load(player.getUniqueId().toString(), world, database, file);
 			
 			Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
 			
