@@ -64,13 +64,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() // When the plugin is disabled
 	{
-		
-		try {
-			database.save(file); // Tries to save file
-
-		} catch (IOException e) {
-			e.printStackTrace(); // Doesn't crash plugin if the above fails
-		}
+		System.out.println("[Hub] Disabling plugin...");
 	}
 	
 	
@@ -84,7 +78,11 @@ public class Main extends JavaPlugin {
 	
 	public static void save(Player player, Player sender, Location loc, Location dest, FileConfiguration db, File file) // Saves the data to the file when called
 	{
-		if (loc.getWorld().getName().equals("hub")) // Need to make sure they spawn at 0, 0 so we will save their coordinates as 0, 0
+		String playerUUID = player.getUniqueId().toString();
+		String senderUUID = sender.getUniqueId().toString();
+		String worldName = loc.getWorld().getName();
+		
+		if (worldName.equals("hub")) // Need to make sure they spawn at 0, 0 so we will save their coordinates as 0, 0
 		{
 			loc.setX(0.5);
 			loc.setZ(193.0);
@@ -93,11 +91,11 @@ public class Main extends JavaPlugin {
 		
 		// We want the "path" to have the root world name as the MAIN world name (no _nether/_the_end). This information is still saved in <world>.uuid.<uuid>.world
 		// The reason for this is because we want to overwrite the saved world with the new world which might be a different dimension WITHOUT creating a new directory for dimensions of a world
-		if (loc.getWorld().getName().contains("nether")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 7) + ".uuid." + player.getUniqueId().toString(), loc); } // If teleporting from Nether
+		if (worldName.contains("nether")) { db.set(worldName.substring(0, worldName.length() - 7) + ".uuid." + playerUUID, loc); } // If teleporting from Nether
 		
-		if (loc.getWorld().getName().contains("the_end")) { db.set(loc.getWorld().getName().substring(0, loc.getWorld().getName().length() - 8) + ".uuid." + player.getUniqueId().toString(), loc); } // If teleporting from The End
+		if (worldName.contains("the_end")) { db.set(worldName.substring(0, worldName.length() - 8) + ".uuid." + playerUUID, loc); } // If teleporting from The End
 		
-		if (!(loc.getWorld().getName().contains("the_end")) && !(loc.getWorld().getName().contains("nether"))) { db.set(loc.getWorld().getName() + ".uuid." + player.getUniqueId().toString(), loc); } // If teleporting from Overworld
+		if (!(worldName.contains("the_end")) && !(worldName.contains("nether"))) { db.set(worldName + ".uuid." + playerUUID, loc); } // If teleporting from Overworld
 		
 		
 		try {
@@ -109,13 +107,13 @@ public class Main extends JavaPlugin {
 		
 		player.teleport(dest); // Teleports sender to the hub if no errors while saving
 
-		if (player.getUniqueId().equals(sender.getUniqueId())) // If the sender and the person teleporting is the same
+		if (playerUUID.equals(senderUUID)) // If the sender and the person teleporting is the same
 		{
-			sender.sendMessage("§aSuccssfully sent to" + dest.getWorld().getName() + "!");
+			sender.sendMessage("§aSuccssfully sent to " + dest.getWorld().getName() + "!");
 		}
 		
 		// If a staff ran /<command> [player]
-		sender.sendMessage("§a" + player.getName() + "was successfully sent to " + dest.getWorld().getName() + "!");
+		sender.sendMessage("§a" + player.getName() + " was successfully sent to " + dest.getWorld().getName() + "!");
 		player.sendMessage("§aYou've been sent to " + dest.getWorld().getName() + " by a staff member!");
 		
 	}

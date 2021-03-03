@@ -25,7 +25,7 @@ public class Hub implements CommandExecutor { // /hub
 	
 		Player player = (Player) sender; // new Player object from CommandSender
 		
-		Location dest = new Location(Bukkit.getWorld("hub"), 0.5, 193, 0.5);
+		Location dest = new Location(Bukkit.getWorld("hub"), 0.5, 193.0, 0.5, 0, 0);
 		
 		if (args.length == 2) { return false; } // Returns false usage of /hub if more than 1 arguments (/hub bkYT str)
 		
@@ -39,9 +39,10 @@ public class Hub implements CommandExecutor { // /hub
 			
 			player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
 			
-			if (((Player) sender).getLocation().getWorld().getName().equals("hub"))
+			String currentWorld = player.getLocation().getWorld().getName();
+			if (currentWorld.equals("hub"))
 			{ 
-				((Player) sender).sendMessage("§cYou cannot use this command in the Hub.");
+				player.sendMessage("§cYou are already in Hub.");
 				return true; // Not false because false returns the correct usage, I don't want that lol
 			}
 			
@@ -53,13 +54,14 @@ public class Hub implements CommandExecutor { // /hub
 			
 		}
 		
-		if (((Player) sender).getLocation().getWorld().getName().equals("hub"))
+		String currentWorld = player.getLocation().getWorld().getName();
+		if (currentWorld.equals("hub"))
 		{ 
-			((Player) sender).sendMessage("§cYou cannot use this command in the Hub.");
+			player.sendMessage("§cYou are already in Hub.");
 			return true; // Not false because false returns the correct usage, I don't want that lol
 		}
 		
-		Main.save(player, (Player)sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
+		Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
 		
 		return true; // You NEED to return a boolean or else it will give error
 	}
