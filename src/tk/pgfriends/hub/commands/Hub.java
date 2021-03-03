@@ -21,7 +21,37 @@ public class Hub implements CommandExecutor { // /hub
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player)) { return false; }
+		if (!(sender instanceof Player)) { return false; } // If it isn't a player
+	
+		Player player = (Player) sender; // new Player object from CommandSender
+		
+		Location dest = new Location(Bukkit.getWorld("hub"), 0.5, 193, 0.5);
+		
+		if (args.length == 2) { return false; } // Returns false usage of /hub if more than 1 arguments (/hub bkYT str)
+		
+		if (args.length == 1) // If the command looks like: /hub <player>
+		{
+			if (Bukkit.getPlayer(args[0]) == null) // If the requested player name doesn't match any online, return false usage
+			{ 
+				player.sendMessage("§cThis player is not online.");
+				return false;
+			}
+			
+			player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
+			
+			if (((Player) sender).getLocation().getWorld().getName().equals("hub"))
+			{ 
+				((Player) sender).sendMessage("§cYou cannot use this command in the Hub.");
+				return true; // Not false because false returns the correct usage, I don't want that lol
+			}
+			
+			
+			
+			Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
+			
+			return true; // End the event, we are done, kick us out (return true; if successful, return false; if unsucessful)
+			
+		}
 		
 		if (((Player) sender).getLocation().getWorld().getName().equals("hub"))
 		{ 
@@ -29,32 +59,9 @@ public class Hub implements CommandExecutor { // /hub
 			return true; // Not false because false returns the correct usage, I don't want that lol
 		}
 		
-			Player player = (Player) sender; // new Player object from CommandSender
-			
-			Location dest = new Location(Bukkit.getWorld("hub"), 0.5, 193, 0.5);
-			
-			if (args.length == 2) { return false; } // Returns false usage of /hub if more than 1 arguments (/hub bkYT str)
-			
-			if (args.length == 1) // If the command looks like: /hub <player>
-			{
-				if (Bukkit.getPlayer(args[0]) == null) // If the requested player name doesn't match any online, return false usage
-				{ 
-					player.sendMessage("§cThis player is not online.");
-					return false;
-				} 
-				
-				player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
-				
-				Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
-				
-				return true; // End the event, we are done, kick us out (return true; if successful, return false; if unsucessful)
-				
-			}
-			
-			
-			Main.save(player, (Player)sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
-			
-			return true; // You NEED to return a boolean or else it will give error
+		Main.save(player, (Player)sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
+		
+		return true; // You NEED to return a boolean or else it will give error
 	}
 
 
