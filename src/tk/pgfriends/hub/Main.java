@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -48,6 +49,7 @@ public class Main extends JavaPlugin {
 		{
 			// ignore for now lol
 			// get the variables from database here
+			// Probably won't need this
 		}
 		
 		
@@ -62,8 +64,6 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() // When the plugin is disabled
 	{
-		// database.set("blockBroken.playerData." + uuid, pLoc.get(uuid).toString());
-		
 		
 		try {
 			database.save(file); // Tries to save file
@@ -84,14 +84,12 @@ public class Main extends JavaPlugin {
 	
 	public static void save(Player player, Player sender, Location loc, Location dest, FileConfiguration db, File file) // Saves the data to the file when called
 	{
-		/*
-		if (loc.getWorld().getName().equals("hub")) // Need to make sure they spawn at 0, 0
+		if (loc.getWorld().getName().equals("hub")) // Need to make sure they spawn at 0, 0 so we will save their coordinates as 0, 0
 		{
 			loc.setX(0.5);
 			loc.setZ(193.0);
 			loc.setY(0.5);
 		}
-		*/
 		
 		// We want the "path" to have the root world name as the MAIN world name (no _nether/_the_end). This information is still saved in <world>.uuid.<uuid>.world
 		// The reason for this is because we want to overwrite the saved world with the new world which might be a different dimension WITHOUT creating a new directory for dimensions of a world
@@ -106,7 +104,7 @@ public class Main extends JavaPlugin {
 			db.save(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.print("Something bad when saving");
+			System.out.print("Something bad happened when saving");
 			e.printStackTrace();
 		}
 		
@@ -114,7 +112,7 @@ public class Main extends JavaPlugin {
 
 		if (player.getUniqueId().equals(sender.getUniqueId())) // If the sender and the person teleporting is the same
 		{
-			sender.sendMessage("§aSuccssfully teleported!");
+			sender.sendMessage("§aSuccssfully sent to" + dest.getWorld().getName() + "!");
 		}
 		
 		// If a staff ran /<command> [player]
@@ -130,12 +128,22 @@ public class Main extends JavaPlugin {
 	@SuppressWarnings({ "unchecked" })
 	public static Location load(String uuid, World dest, FileConfiguration db) // Loads the data to the plugin when called
 	{
-		if (dest.getName().equals("hub"))
+		/*
+		if (dest.getName().equals("hub")) // This isn't actually being used yet
 		{
 			Location loc = new Location(dest, 0.5, 193.0, 0.5);
 			return loc;
 		}
+		*/
 		
-		return (Location.deserialize((Map<String, Object>) (db.get(dest.getName() + ".uuid." + uuid))));
+		try {
+			Location loc = (Location.deserialize((Map<String, Object>) (db.get(dest.getName() + ".uuid." + uuid))));
+			return loc;
+		} catch (CommandException e) {
+			System.out.print("Something bad happened when loading");
+			e.printStackTrace();
+		}
+		return new Location(dest, 0.5, 193.0, 0.5);
+		
 	}
 }

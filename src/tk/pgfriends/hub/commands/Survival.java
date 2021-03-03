@@ -33,7 +33,7 @@ public class Survival implements CommandExecutor { // /survival
 			Player player = (Player) sender; // new Player object from CommandSender
 			
 			World world = Bukkit.getWorld("survival"); // Gets World survival
-			Location dest = Main.load(player.getUniqueId().toString(), world, database);
+			Location dest; // Initialize before get so no errors
 			
 			if (args.length == 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
 			
@@ -54,6 +54,7 @@ public class Survival implements CommandExecutor { // /survival
 				
 			}
 			
+			dest = Main.load(player.getUniqueId().toString(), world, database);
 			
 			Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
 			
