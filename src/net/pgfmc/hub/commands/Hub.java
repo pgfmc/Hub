@@ -1,10 +1,9 @@
-package tk.pgfriends.hub.commands;
+package net.pgfmc.hub.commands;
 
 import java.io.File;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,24 +11,23 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import tk.pgfriends.hub.Main;
+import net.pgfmc.hub.Main;
 
-public class Survival implements CommandExecutor { // /survival
+public class Hub implements CommandExecutor { // /hub
 	
 	// We need to do this again to avoid using static
 	File file = new File(Main.plugin.getDataFolder() + File.separator + "database.yml"); // Creates a File object (plugin.getDataFolder() here now because this class doesn't extend JavaPlugin (not the Main class))
 	FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data
-
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player)) { return false; }
-		
+		if (!(sender instanceof Player)) { return false; } // If it isn't a player
+	
 		Player player = (Player) sender; // new Player object from CommandSender
 		
-		World world = Bukkit.getWorld("survival"); // Gets World survival
-		Location dest; // Initialize before get so no errors
+		Location dest = new Location(Bukkit.getWorld("hub"), 0.5, 193.0, 0.5, 0, 0);
 		
-		if (args.length == 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
+		if (args.length == 2) { return false; } // Returns false usage of /hub if more than 1 arguments (/hub bkYT str)
 		
 		if (args.length == 1) // If the command looks like: /hub <player>
 		{
@@ -42,13 +40,13 @@ public class Survival implements CommandExecutor { // /survival
 			player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
 			
 			String currentWorld = player.getLocation().getWorld().getName();
-			if (currentWorld.equals("survival") || currentWorld.equals("survival_nether") || currentWorld.equals("survival_the_end"))
+			if (currentWorld.equals("hub"))
 			{ 
-				player.sendMessage("§cThe player is already in Survival.");
-				return true; // Silent
+				player.sendMessage("§cYou are already in Hub.");
+				return true; // Not false because false returns the correct usage, I don't want that lol
 			}
 			
-			dest = Main.load(player.getUniqueId().toString(), world, database, file);
+			
 			
 			Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
 			
@@ -57,19 +55,16 @@ public class Survival implements CommandExecutor { // /survival
 		}
 		
 		String currentWorld = player.getLocation().getWorld().getName();
-		if (currentWorld.equals("survival") || currentWorld.equals("survival_nether") || currentWorld.equals("survival_the_end"))
+		if (currentWorld.equals("hub"))
 		{ 
-			player.sendMessage("§cYou are already in Survival");
-			return true; // Silent
+			player.sendMessage("§cYou are already in Hub.");
+			return true; // Not false because false returns the correct usage, I don't want that lol
 		}
-		
-		dest = Main.load(player.getUniqueId().toString(), world, database, file);
 		
 		Main.save(player, (Player) sender, player.getLocation(), dest, database, file); // Puts the players UUID and pairs it with their Location in the HashMap in Main
 		
 		return true; // You NEED to return a boolean or else it will give error
 	}
-	
-	
+
 
 }

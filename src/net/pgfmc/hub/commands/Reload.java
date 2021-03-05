@@ -1,10 +1,10 @@
-package tk.pgfriends.hub.commands;
+package net.pgfmc.hub.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import tk.pgfriends.hub.Main;
+import net.pgfmc.hub.Main;
 
 public class Reload implements CommandExecutor {
 
