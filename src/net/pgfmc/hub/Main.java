@@ -110,6 +110,7 @@ public class Main extends JavaPlugin {
 		if (playerUUID.equals(senderUUID)) // If the sender and the person teleporting is the same
 		{
 			sender.sendMessage("§aSuccssfully sent to " + dest.getWorld().getName() + "!");
+			return;
 		}
 		
 		// If a staff ran /<command> [player]
