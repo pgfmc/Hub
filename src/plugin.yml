@@ -1,5 +1,5 @@
 name: Hub
-version: 1.1.0
+version: 1.2.0
 api-version: 1.16
 author: bk
 main: net.pgfmc.hub.Main
@@ -12,4 +12,8 @@ commands:
   survival:
     description: Teleport to Survival
     usage: /<command> [player]
-    aliases: [surv]
+    aliases: [sur, surv]
+  creative:
+    description: Teleport to Creative
+    usage: /<command> [player]
+    aliases: [cre, creat]

@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.pgfmc.hub.commands.Creative;
 import net.pgfmc.hub.commands.Hub;
 import net.pgfmc.hub.commands.Survival;
 
@@ -33,6 +34,7 @@ public class Main extends JavaPlugin {
 		// (We don't need this right now) -- getServer().getPluginManager().registerEvents(new PlayerEvents(), this); // Registers PlayerEvents events class
         this.getCommand("hub").setExecutor(new Hub()); // Registers Hub command class
         this.getCommand("survival").setExecutor(new Survival()); // Registers Survival command class
+        this.getCommand("creative").setExecutor(new Creative()); // Registers Survival command class
         
 		
 		if (!file.exists()) // If the file doesn't exist, create one
@@ -134,7 +136,12 @@ public class Main extends JavaPlugin {
 		
 		if (file.exists()) {
 			try {
-				db.load(file); // loads file (duh)
+				db.load(file); // loads file
+				
+				if (db.get(dest.getName() + ".uuid." + uuid) == null)
+				{
+					return null;
+				}
 				
 				return (Location) db.get(dest.getName() + ".uuid." + uuid);
 				

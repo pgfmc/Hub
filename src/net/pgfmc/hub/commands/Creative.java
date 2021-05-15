@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import net.pgfmc.hub.Main;
 
-public class Survival implements CommandExecutor { // /survival
+public class Creative implements CommandExecutor { // /survival
 	
 	// We need to do this again to avoid using static
 	File file = new File(Main.plugin.getDataFolder() + File.separator + "database.yml"); // Creates a File object (plugin.getDataFolder() here now because this class doesn't extend JavaPlugin (not the Main class))
@@ -26,7 +26,7 @@ public class Survival implements CommandExecutor { // /survival
 		
 		Player player = (Player) sender; // new Player object from CommandSender
 		
-		World world = Bukkit.getWorld("survival"); // Gets World survival
+		World world = Bukkit.getWorld("creative"); // Gets World survival
 		Location dest; // Initialize before get so no errors
 		
 		if (args.length == 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
@@ -42,9 +42,9 @@ public class Survival implements CommandExecutor { // /survival
 			player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
 			
 			String currentWorld = player.getLocation().getWorld().getName();
-			if (currentWorld.equals("survival") || currentWorld.equals("survival_nether") || currentWorld.equals("survival_the_end"))
+			if (currentWorld.equals("creative") || currentWorld.equals("creative_nether") || currentWorld.equals("creative_the_end"))
 			{ 
-				player.sendMessage("§cThe player is already in Survival.");
+				player.sendMessage("§cThe player is already in Creative.");
 				return true; // Silent
 			}
 			
@@ -65,9 +65,9 @@ public class Survival implements CommandExecutor { // /survival
 		}
 		
 		String currentWorld = player.getLocation().getWorld().getName();
-		if (currentWorld.equals("survival") || currentWorld.equals("survival_nether") || currentWorld.equals("survival_the_end"))
+		if (currentWorld.equals("creative") || currentWorld.equals("creative_nether") || currentWorld.equals("creative_the_end"))
 		{ 
-			player.sendMessage("§cYou are already in Survival");
+			player.sendMessage("§cYou are already in Creative");
 			return true; // Silent
 		}
 		
