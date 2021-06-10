@@ -23,6 +23,9 @@ public class Prison implements CommandExecutor { // /survival
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player)) { return false; }
+		// THIS PART IS FOR PRISON PLUGIN
+		((Player) sender).performCommand("FirstJoin"); // This will activate another command in the Prison plugin to give first join items
+		// THIS PART IS FOR PRISON PLUGIN
 		
 		Player player = (Player) sender; // new Player object from CommandSender
 		
@@ -85,7 +88,5 @@ public class Prison implements CommandExecutor { // /survival
 		
 		return true; // You NEED to return a boolean or else it will give error
 	}
-	
-	
 
 }

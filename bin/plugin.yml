@@ -18,6 +18,6 @@ commands:
     usage: /<command> [player]
     aliases: [cre, creat]
   prison:
-    description: Teleport to Creative
+    description: Teleport to Prison
     usage: /<command> [player]
     aliases: [pris]
