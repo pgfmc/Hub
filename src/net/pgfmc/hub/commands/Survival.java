@@ -42,7 +42,7 @@ public class Survival implements CommandExecutor { // /survival
 			player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
 			
 			String currentWorld = player.getLocation().getWorld().getName();
-			if (currentWorld.equals("survival") || currentWorld.equals("survival_nether") || currentWorld.equals("survival_the_end"))
+			if (Main.isInWorld(currentWorld, world.getName(), player))
 			{ 
 				player.sendMessage("§cThe player is already in Survival.");
 				return true; // Silent
@@ -65,7 +65,7 @@ public class Survival implements CommandExecutor { // /survival
 		}
 		
 		String currentWorld = player.getLocation().getWorld().getName();
-		if (currentWorld.equals("survival") || currentWorld.equals("survival_nether") || currentWorld.equals("survival_the_end"))
+		if (Main.isInWorld(currentWorld, world.getName(), player))
 		{ 
 			player.sendMessage("§cYou are already in Survival");
 			return true; // Silent
