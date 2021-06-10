@@ -17,3 +17,7 @@ commands:
     description: Teleport to Creative
     usage: /<command> [player]
     aliases: [cre, creat]
+  prison:
+    description: Teleport to Creative
+    usage: /<command> [player]
+    aliases: [pris]

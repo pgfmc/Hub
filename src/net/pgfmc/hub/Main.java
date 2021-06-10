@@ -162,4 +162,17 @@ public class Main extends JavaPlugin {
 		return new Location(dest, 0.5, 300.0, 0.5);
 		
 	}
+	
+	public static boolean isInWorld(String currLoc, String expectedWorld, Player player)
+	{
+		String[] dims = { currLoc + "_nether", currLoc + "_the_end" };
+		for (String dim : dims)
+		{
+			if (currLoc == dim)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
