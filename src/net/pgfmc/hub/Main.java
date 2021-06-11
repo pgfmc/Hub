@@ -35,6 +35,7 @@ public class Main extends JavaPlugin {
         this.getCommand("hub").setExecutor(new Hub()); // Registers Hub command class
         this.getCommand("survival").setExecutor(new Survival()); // Registers Survival command class
         this.getCommand("creative").setExecutor(new Creative()); // Registers Survival command class
+        this.getCommand("prison").setExecutor(new Creative()); // Registers Survival command class
         
 		
 		if (!file.exists()) // If the file doesn't exist, create one
