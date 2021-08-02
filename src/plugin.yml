@@ -1,5 +1,5 @@
 name: Hub
-version: 1.3.0
+version: 2.0.0
 api-version: 1.16
 author: bk
 main: net.pgfmc.hub.Main
