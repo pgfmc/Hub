@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -12,62 +13,55 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.pgfmc.hub.commands.Creative;
-import net.pgfmc.hub.commands.Hub;
-import net.pgfmc.hub.commands.Survival;
+import net.pgfmc.hub.commands.Goto;
 
 public class Main extends JavaPlugin {
 	
 	public static Main plugin; // Used for constructor
 	
 	File file = new File(getDataFolder() + File.separator + "database.yml"); // Creates a File object
-	FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data	
+	FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data
+	
+	FileConfiguration config = this.getConfig();
 	
 	
 	@Override
 	public void onEnable() // When the plugin is enabled
 	{
+		if (!((new File(getDataFolder() + File.separator + "config.yml")).exists())) // In the config. Ability for per world teleportation enable/disable or w/e
+		{
+			// ADD ALL NEW WORLD NAMES HERE, CONFIG VALUES MUST MATCH WORLD NAMES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (also add in plugin.yml)
+			config.addDefault("hub", true);
+			config.addDefault("survival", true);
+			config.addDefault("creative", true);
+			config.addDefault("prison", true);
+			config.addDefault("parkour", true);
+	        config.options().copyDefaults(true);
+	        saveConfig();
+		}
+
 		plugin = this;
 		
 		
-		//REGISTRATION for Events and Commands!
-		// (We don't need this right now) -- getServer().getPluginManager().registerEvents(new PlayerEvents(), this); // Registers PlayerEvents events class
-        this.getCommand("hub").setExecutor(new Hub()); // Registers Hub command class
-        this.getCommand("survival").setExecutor(new Survival()); // Registers Survival command class
-        this.getCommand("creative").setExecutor(new Creative()); // Registers Survival command class
-        this.getCommand("prison").setExecutor(new Creative()); // Registers Survival command class
-        
 		
-		if (!file.exists()) // If the file doesn't exist, create one
-		{
-			try {
-				file.createNewFile();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		this.getCommand("goto").setExecutor(new Goto());
 		
-		if (file.exists()) // If it does exist, load in some data if needed
-		{
-			// ignore for now lol
-			// get the variables from database here
-			// Probably won't need this
-		}
+		
+		if (!file.exists()) { try { file.createNewFile(); } catch (IOException e) { e.printStackTrace(); } }
 		
 		
 		
 		
 		
 		
-		
+		Bukkit.getConsoleSender().sendMessage("[PGF Hub] Enabled...");
 		
 	}
 	
 	@Override
 	public void onDisable() // When the plugin is disabled
 	{
-		System.out.println("[Hub] Disabling plugin...");
+		Bukkit.getConsoleSender().sendMessage("[PGF Hub] Disabled...");
 	}
 	
 	
@@ -87,9 +81,7 @@ public class Main extends JavaPlugin {
 		
 		if (worldName.equals("hub")) // Need to make sure they spawn at 0, 0 so we will save their coordinates as 0, 0
 		{
-			loc.setX(0.5);
-			loc.setZ(193.0);
-			loc.setY(0.5);
+			loc = new Location(loc.getWorld(), 0.5, 193.0, 0.5);
 		}
 		
 		// We want the "path" to have the root world name as the MAIN world name (no _nether/_the_end). This information is still saved in <world>.uuid.<uuid>.world
@@ -127,13 +119,7 @@ public class Main extends JavaPlugin {
 
 	public static Location load(String uuid, World dest, FileConfiguration db, File file) // Loads the data to the plugin when called
 	{
-		/*
-		if (dest.getName().equals("hub")) // This isn't actually being used yet
-		{
-			Location loc = new Location(dest, 0.5, 193.0, 0.5);
-			return loc;
-		}
-		*/
+
 		
 		if (file.exists()) {
 			try {
@@ -160,16 +146,16 @@ public class Main extends JavaPlugin {
 			}
 		}
 		
-		return new Location(dest, 0.5, 300.0, 0.5);
+		return null;
 		
 	}
 	
-	public static boolean isInWorld(String currLoc, String expectedWorld, Player player)
+	public static boolean isInWorld(String currLoc, String expectedWorld)
 	{
-		String[] dims = { currLoc + "_nether", currLoc + "_the_end" };
+		String[] dims = { currLoc, currLoc + "_nether", currLoc + "_the_end" };
 		for (String dim : dims)
 		{
-			if (currLoc == dim)
+			if (expectedWorld == dim)
 			{
 				return true;
 			}

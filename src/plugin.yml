@@ -3,21 +3,9 @@ version: 1.3.0
 api-version: 1.16
 author: bk
 main: net.pgfmc.hub.Main
-description: Allows players to go to the Hub and other minigames
+description: Allows players to go to the Hub and other games
 commands:
-  hub:
-    description: Teleport to the Hub
-    usage: /<command> [player]
-    aliases: [spawn]
-  survival:
-    description: Teleport to Survival
-    usage: /<command> [player]
-    aliases: [sur, surv]
-  creative:
-    description: Teleport to Creative
-    usage: /<command> [player]
-    aliases: [cre, creat]
-  prison:
-    description: Teleport to Prison
-    usage: /<command> [player]
-    aliases: [pris]
+  goto:
+    description: Teleport to a different world (please use /<world>)
+    usage: /[world]
+    aliases: [hub, survival, creative, prison, parkour]

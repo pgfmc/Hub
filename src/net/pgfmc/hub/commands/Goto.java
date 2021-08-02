@@ -14,22 +14,47 @@ import org.bukkit.entity.Player;
 
 import net.pgfmc.hub.Main;
 
-public class Survival implements CommandExecutor { // /survival
+public class Goto implements CommandExecutor {
 	
-	// We need to do this again to avoid using static
-	File file = new File(Main.plugin.getDataFolder() + File.separator + "database.yml"); // Creates a File object (plugin.getDataFolder() here now because this class doesn't extend JavaPlugin (not the Main class))
-	FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player)) { return false; }
+
+		// We need to do this again to avoid using static
+		File file = new File(Main.plugin.getDataFolder() + File.separator + "database.yml"); // Creates a File object (plugin.getDataFolder() here now because this class doesn't extend JavaPlugin (not the Main class))
+		FileConfiguration database = YamlConfiguration.loadConfiguration(file); // Turns the File object into YAML and loads data
+
 		
+		
+		if (!(sender instanceof Player)) { return false; }		
+		
+		if (label == cmd.getName()) // /creative, /survival
+		{
+			sender.sendMessage("Please use /<world> instead of /goto");
+			return true;
+		}
+		
+		if (args.length >= 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
+		
+		
+		
+
 		Player player = (Player) sender; // new Player object from CommandSender
 		
-		World world = Bukkit.getWorld("survival"); // Gets World survival
+		World world = Bukkit.getWorld(label); // Gets World survival
 		Location dest; // Initialize before get so no errors
 		
-		if (args.length == 2) { return false; } // Returns false usage of /hub if more than 3 arguments (/hub bkYT str)
+		if (world == null)
+		{
+			player.sendMessage("§cThis world is not available");
+			return true;
+		}
+		
+		if (!Main.plugin.getConfig().getBoolean(label))
+		{
+			player.sendMessage("§cThis world is not available");
+			return true;
+		}
 		
 		if (args.length == 1) // If the command looks like: /hub <player>
 		{
@@ -42,9 +67,9 @@ public class Survival implements CommandExecutor { // /survival
 			player = Bukkit.getPlayer(args[0]); // Get the Player object from the requested player name
 			
 			String currentWorld = player.getLocation().getWorld().getName();
-			if (Main.isInWorld(currentWorld, world.getName(), player))
-			{ 
-				player.sendMessage("§cThe player is already in Survival.");
+			if (Main.isInWorld(currentWorld, world.getName()))
+			{
+				sender.sendMessage("§cThe player is already in " + label);
 				return true; // Silent
 			}
 			
@@ -65,9 +90,9 @@ public class Survival implements CommandExecutor { // /survival
 		}
 		
 		String currentWorld = player.getLocation().getWorld().getName();
-		if (Main.isInWorld(currentWorld, world.getName(), player))
-		{ 
-			player.sendMessage("§cYou are already in Survival");
+		if (Main.isInWorld(currentWorld, world.getName()))
+		{
+			player.sendMessage("§cYou are already in " + label);
 			return true; // Silent
 		}
 		
@@ -86,6 +111,7 @@ public class Survival implements CommandExecutor { // /survival
 		return true; // You NEED to return a boolean or else it will give error
 	}
 	
-	
+
+
 
 }
